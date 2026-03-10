@@ -1,0 +1,56 @@
+@use "../../styles/variables" as *;
+
+
+.button{
+    font-size: 18px;
+}
+
+.title{
+    white-space: pre-line;
+    font-weight: bold;
+    font-size: 44px;
+}
+
+
+
+.p{
+    font-size: 14px;
+    &-14{
+        font-size: 14px;
+    }
+    &-28{
+        font-size: 28px;
+    }
+
+    &-20{
+        font-size: 20px;
+    }
+
+    &-18{
+        font-size: 18px;
+    }
+
+    &-16{
+        font-size: 16px;
+    }
+}
+
+.color_primary{
+    color: $primary;
+}
+.color_secondary{
+    color: $text-secondary;
+}
+.color_accent{
+    color: $text-accent;
+}
+
+.clamp {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+    overflow-wrap: break-word;
+    word-break: break-word;
+}

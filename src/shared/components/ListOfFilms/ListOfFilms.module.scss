@@ -1,0 +1,36 @@
+.listOfFilms {
+  padding: 50px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 3fr));
+  gap: 32px;
+  width: 100%;
+  justify-items: center;
+  overflow: hidden;
+}
+
+.infText{
+  margin-top: 100px;
+}
+
+
+@media (min-width: 2200px) {
+  .listOfFilms {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 36px;
+  }
+}
+
+@media (max-width: 1440px) {
+  .listOfFilms {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .listOfFilms {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+    padding: 20px 0;
+  }
+}
