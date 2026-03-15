@@ -4,7 +4,6 @@ import s from './Navbar.module.scss';
 import {BurgerNavbar} from "@components/index";
 import React from "react";
 import Image from "next/image";
-import {useRouter} from "next/navigation";
 import NavBarPages from "@components/Navbar/NavBarPages/NavBarPages";
 import FavoritesIcon from "@components/Navbar/FavoritesIcon/FavoritesIcon";
 import AccountIcon from "@components/Navbar/AccountIcon/AccountIcon";

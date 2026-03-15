@@ -1,5 +1,5 @@
 'use client'
-import { Button, StarIcon, Text } from '@components/index';
+import { Button, Text } from '@components/index';
 import React from 'react';
 import s from './Card.module.scss';
 import cn from 'classnames';

@@ -1,2 +1,2 @@
-export { default } from './FilmPage.tsx';
-export * from './FilmPage.tsx';
+export { default } from './FilmPage';
+export * from './FilmPage';
