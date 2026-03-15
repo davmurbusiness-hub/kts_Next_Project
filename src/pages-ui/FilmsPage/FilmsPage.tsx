@@ -1,10 +1,10 @@
 'use client'
-import s from './FilmsList.module.scss';
+import s from './FilmsPage.module.scss';
 import { useObserver } from '@hooks/useObserver';
 import {
     Button,
     Input,
-    ListOfFilms,
+    FilmsList,
     Loader,
     MultiDropdown,
     Navbar,
@@ -12,13 +12,13 @@ import {
     Text,
 } from '@components/index';
 import { observer } from 'mobx-react-lite';
-import rootStore from '@store/globalStores/RootStore/instance';
 import { useRef } from 'react';
 import FilmsListStore from '@store/localStores/FilmsListStore/';
 import { useLocalStore } from '@hooks/useLocalStore';
 import type {Category} from "@shared-types/CategoryType";
 import type {MetaFromResponse} from "@api/ApiTypes";
 import type {Film} from "@shared-types/FilmType";
+import {useRootStore} from "@providers/StoreProvider";
 
 type Props = {
     initialFilms: Film[];
@@ -26,7 +26,8 @@ type Props = {
     initialCategories: Category[];
 };
 
-const FilmsList = ({ initialFilms, initialMeta, initialCategories }: Props) => {
+const FilmsPage = ({ initialFilms, initialMeta, initialCategories }: Props) => {
+    const rootStore = useRootStore();
     const filmsListStore = useLocalStore(
         () => new FilmsListStore({
             films: initialFilms,
@@ -87,7 +88,7 @@ const FilmsList = ({ initialFilms, initialMeta, initialCategories }: Props) => {
                     </div>
                 </div>
             </div>
-            <ListOfFilms
+            <FilmsList
                 filmsList={filmsListStore.films}
                 buttonText={'В избранное'}
                 emptyText={'Фильмов по вашему запросу не найдено, попробуйте еще'}
@@ -108,4 +109,4 @@ const FilmsList = ({ initialFilms, initialMeta, initialCategories }: Props) => {
     );
 };
 
-export default observer(FilmsList);
+export default observer(FilmsPage);

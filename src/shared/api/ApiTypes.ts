@@ -1,5 +1,5 @@
-import type { Film } from 'types/FilmType';
-import type { Category } from 'types/CategoryType';
+import type { Film } from '@shared-types/FilmType';
+import type { Category } from '@shared-types/CategoryType';
 
 export enum HTTPMethod {
   GET = 'GET',
@@ -53,6 +53,14 @@ export type ApiResponse<SuccessT, ErrorT> =
       data: null;
       status: StatusHTTP;
     };
+
+export type UserType = {
+  id: number;
+  documentId: string;
+  username: string;
+  email: string;
+
+}
 
 export type FavoriteAddResponse = {
   created_at: string;

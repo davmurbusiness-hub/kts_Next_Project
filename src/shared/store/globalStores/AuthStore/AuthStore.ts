@@ -123,6 +123,7 @@ export default class AuthStore implements IGlobalStore {
         this._login = String(response.user);
         this._authorized = true;
         this._token = response.jwt;
+        this.getFavorite()
       });
 
       return {
@@ -154,9 +155,10 @@ export default class AuthStore implements IGlobalStore {
 
     try {
       runInAction(() => {
-        this._login = String(response.user);
+        this._login = String(response.user.username);
         this._authorized = true;
         this._token = response.jwt;
+        this.getFavorite()
       });
       return {
         success: true,

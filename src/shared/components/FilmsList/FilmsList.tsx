@@ -1,8 +1,8 @@
-import s from './ListOfFilms.module.scss';
-import { Card, Text } from '@components/';
-import type { Film } from 'types/FilmType';
+import s from './FilmsList.module.scss';
+import { Card, Text } from '@components/index';
+import type { Film } from '@shared-types/FilmType';
 
-export type ListOfFilmsProps = {
+type ListOfFilmsProps = {
   filmsList: Film[];
   buttonText?: string;
   isLoading?: boolean;
@@ -10,7 +10,7 @@ export type ListOfFilmsProps = {
   buttonFunc: (film: Film) => void;
 };
 
-const ListOfFilms = ({
+const FilmsList = ({
   filmsList = [],
   buttonText = 'В избранное',
   emptyText = 'Фильмов по вашему запросу не найдено, попробуйте еще',
@@ -47,4 +47,4 @@ const ListOfFilms = ({
   );
 };
 
-export default ListOfFilms;
+export default FilmsList;

@@ -6,13 +6,13 @@ import {
   HTTPMethod,
   StatusHTTP,
   type QueryParams,
-  type Filters,
+  type Filters
 } from './ApiTypes';
 import type {
   FilmDataFromResponse,
   CategoryDataFromResponse,
   FavoriteAddResponse,
-} from './ApiTypes';
+ UserType} from './ApiTypes';
 import type {Film} from "@shared-types/FilmType";
 
 const LIMIT = 10;
@@ -83,17 +83,17 @@ export default class ApiStore implements IApiStore {
   async login(
       identifier: string,
       password: string
-  ): Promise<{ user: unknown; jwt: string } | null> {
+  ): Promise<{ user: UserType; jwt: string } | null> {
     if (!identifier || !password) return null;
 
-    const response = await this.request<{ user: unknown; jwt: string }>({
+    const response = await this.request<{ user: UserType; jwt: string }>({
       endpoint: '/auth/local',
       method: HTTPMethod.POST,
       headers: {},
       data: { identifier, password },
     });
 
-    if (!response.success || !response.data?.user || !response.data?.jwt) {
+    if (!response.success || !response.data?.jwt) {
       return null;
     }
 

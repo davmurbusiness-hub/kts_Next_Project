@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
         remotePatterns: [
             {
                 protocol: 'https',
-                hostname: 'front-school-strapi.ktsdev.ru',
+                hostname: 'front-school.minio.ktsdev.ru',
             },
         ],
     },

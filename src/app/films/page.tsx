@@ -1,4 +1,4 @@
-import FilmsList from "@pages-ui/FilmsList";
+import FilmsList from "@pages-ui/FilmsPage";
 import {fetchCategories, fetchInitialFilms} from "@api/serverApi";
 import type { Metadata } from 'next';
 

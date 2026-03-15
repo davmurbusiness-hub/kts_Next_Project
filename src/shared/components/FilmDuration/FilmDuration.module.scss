@@ -1,0 +1,20 @@
+.cardImageInf {
+  max-width: 100%;
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(0, 0, 0, 0.8);
+  border-radius: 12px;
+
+  gap: 10px;
+  padding: 4px 8px;
+}
+
+.duration {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  z-index: 1;
+}

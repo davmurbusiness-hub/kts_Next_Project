@@ -106,8 +106,11 @@ export default class FilmsListStore implements ILocalStore {
           });
           this.loadFilms();
         },
-        { fireImmediately: true }
     );
+
+    setTimeout(() => {
+      this.loadFilms();
+    }, 0);
 
     reaction(
         () => this._filmsDataStore.responseMeta?.pagination,

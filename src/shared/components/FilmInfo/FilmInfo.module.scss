@@ -1,0 +1,27 @@
+@use "../../../shared/styles/variables" as *;
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  flex: 1 1 400px;
+  width: 50%;
+  min-width: 280px;
+
+  @media (max-width: 375px) {
+    gap: 16px;
+  }
+}
+
+.title {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.description {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}

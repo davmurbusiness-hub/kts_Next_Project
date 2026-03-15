@@ -1,0 +1,13 @@
+@use "../../../../shared/styles/variables" as *;
+
+.gallery {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.images {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
