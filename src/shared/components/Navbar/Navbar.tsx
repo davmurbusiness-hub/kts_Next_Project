@@ -22,7 +22,6 @@ export type Page = {
 const pages: Page[] = [
     {name: 'films', value: 'Фильмы'},
     {name: 'trends', value: 'Новинки'},
-    {name: 'collections', value: 'Подборки'},
 ];
 
 const iconSize = 30;

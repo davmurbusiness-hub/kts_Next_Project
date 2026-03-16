@@ -101,12 +101,15 @@ export type IApiStore = {
 
 export type Filters = {
   title?: { $containsi: string };
-  category?: { id: { $in: number[] } };
+  category?: {
+    id?: { $in: number[] }
+  };
+  releaseYear?: { $containsi: number }
 };
 
 export type QueryParams = {
   populate: string[];
-  pagination: {
+  pagination?: {
     page: number;
     pageSize: number;
   };

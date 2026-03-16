@@ -3,14 +3,16 @@ import { Text } from '@components/index';
 import type { Film } from '@/shared/types/FilmType';
 import FilmRating from '@components/FilmRating/FilmRating';
 import FilmMeta from '@components/FilmMeta/FilmMeta';
+import cn from "classnames";
 
 type FilmInfoProps = {
-  film: Film;
+    className?: string;
+    film: Film;
 };
 
-const FilmInfo = ({ film }: FilmInfoProps) => {
+const FilmInfo = ({ film, className }: FilmInfoProps) => {
   return (
-    <div className={s.info}>
+    <div className={cn(s.info, className)}>
       <div className={s.title}>
         <Text tag={'h2'}>{film.title}</Text>
         <FilmRating rating={film.rating} />

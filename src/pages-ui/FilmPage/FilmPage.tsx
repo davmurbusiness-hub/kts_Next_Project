@@ -27,7 +27,9 @@ const FilmPage = ({ documentId, initialFilm }: FilmPageProps) => {
       ) : (
         <div className={s.content}>
           <div className={s.film}>
-            <FilmPlayer trailerUrl={filmStore.film!.trailerUrl} />
+              <div className={s.trailer}>
+                  <FilmPlayer autoPlay={true} trailerUrl={filmStore.film!.trailerUrl} />
+              </div>
             <FilmInfo film={filmStore.film!} />
           </div>
           <FilmGallery gallery={filmStore.film!.gallery} />

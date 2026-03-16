@@ -38,6 +38,7 @@
   align-items: center;
   gap: 4px;
   text-decoration: none;
+  color: inherit;
 }
 
 .icon{
@@ -46,6 +47,7 @@
 
 .iconText{
   text-align: center;
+  display: none;
 }
 
 .pages {
@@ -77,22 +79,24 @@
 }
 
 
+@media (max-width: 800px) {
+  .navbar {
+    padding: 20px 15px;
+    height: 7%;
+  }
+  .iconText {
+    display: none;
+  }
+  .icons {
+    gap: 10px;
+  }
+}
+
 @media (max-width: 576px) {
   .navbar {
     display: none;
   }
   .burgerMenu {
     display: block;
-  }
-}
-
-@media (max-width: 800px) {
-  .navbar {
-    padding: 20px 15px;
-    height: 7%;
-  }
-
-  .icons{
-    gap: 10px;
   }
 }

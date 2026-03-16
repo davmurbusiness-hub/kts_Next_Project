@@ -3,7 +3,7 @@ import {fetchCategories, fetchInitialFilms} from "@api/serverApi";
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-    title: 'Все фильмы',        // итог: "Все фильмы | Cinema"
+    title: 'Все фильмы',
     description: 'Подборка для вечера уже здесь: фильмы, сериалы и новинки. Найди что посмотреть за пару секунд.',
 };
 
