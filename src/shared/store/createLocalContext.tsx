@@ -1,4 +1,4 @@
-import type { ILocalStore } from 'hooks/useLocalStore';
+import type { ILocalStore } from '@hooks/useLocalStore';
 import React from 'react';
 
 export const createLocalContext = <T extends ILocalStore>(

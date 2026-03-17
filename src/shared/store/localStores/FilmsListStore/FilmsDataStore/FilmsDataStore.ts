@@ -3,7 +3,7 @@ import type { ILocalStore } from '@hooks/useLocalStore';
 import { makeObservable, observable, runInAction } from 'mobx';
 import { Meta } from '@utils/meta';
 import ApiStore from '@api/ApiStore';
-import type { MetaFromResponse } from '@api/ApiTypes';
+import type {MetaFromResponse} from '@api/ApiTypes';
 import type { Category } from '@shared-types/CategoryType';
 
 type InitialData = {
@@ -65,7 +65,7 @@ export default class FilmsDataStore implements ILocalStore {
     }
   }
 
-  async getFilmsList(page = 1, searchValue = '', selectedCategories: number[] = []): Promise<void> {
+  async getFilmsList(page = 1, searchValue = '', selectedCategories: number[] = [], sortingInfo: string[] = []): Promise<void> {
     const controller = this.abortPrevious();
 
     runInAction(() => {
@@ -75,8 +75,9 @@ export default class FilmsDataStore implements ILocalStore {
     try {
       const response = await this._apiStore.fetchData(page, {
         signal: controller.signal,
-        searchValue,
-        selectedCategories,
+        searchValue: searchValue,
+        selectedCategories: selectedCategories,
+        sortingInfo: sortingInfo,
       });
 
       runInAction(() => {

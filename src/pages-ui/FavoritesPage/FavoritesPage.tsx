@@ -3,15 +3,12 @@ import { Navbar, PageText, Text } from '@components/index';
 import s from './FavoritesPage.module.scss';
 import { observer } from 'mobx-react-lite';
 import * as React from 'react';
-import ListOfFilms from '@components/ListOfFilms';
+import FilmsList from '@components/FilmsList';
 import type { Film } from '@shared-types/FilmType';
 import {useRootStore} from "@providers/StoreProvider";
 
 const FavoritesPage = () => {
     const rootStore = useRootStore();
-  React.useEffect(() => {
-    rootStore.auth.getFavorite();
-  }, []);
 
   return (
     <div>
@@ -26,7 +23,7 @@ const FavoritesPage = () => {
         />
         <div>
           {rootStore.auth.authorized ? (
-            <ListOfFilms
+            <FilmsList
               filmsList={rootStore.auth.favorites}
               buttonText={'Удалить'}
               emptyText={'Вы еще не добавили фильмы в избранное'}

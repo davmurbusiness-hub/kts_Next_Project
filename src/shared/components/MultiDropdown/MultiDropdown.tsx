@@ -57,26 +57,26 @@ const MultiDropdown: React.FC<MultiDropdownProps> = ({
     return options.filter((option) => option.value.toLowerCase().includes(lowerSearch));
   }, [options, searchText]);
 
-  const handleInputChange = (text: string) => {
+  const handleInputChange = React.useCallback((text: string) => {
     if (disabled) return;
     setSearchText(text);
     if (!isOpen) {
       setIsOpen(true);
     }
-  };
+  }, [disabled, isOpen]);
 
-  const handleOptionClick = (option: Option) => {
+  const handleOptionClick = React.useCallback((option: Option) => {
     if (disabled) return;
     const isSelected = value.some((v) => v.key === option.key);
     const newValue = isSelected ? value.filter((v) => v.key !== option.key) : [...value, option];
     onChange(newValue);
-  };
+  }, [disabled, value, onChange]);
 
-  const handleFocus = () => {
+  const handleFocus = React.useCallback(() => {
     if (!disabled) {
       setIsOpen(true);
     }
-  };
+  }, [disabled]);
 
   // Получаем текст для placeholder, когда ничего не выбрано
   const placeholderText = getTitle([]);

@@ -1,32 +1,33 @@
-'use client'
-import React from 'react';
+import * as React from 'react';
 
 export type ILocalStore = {
   destroy(): void;
 };
 
 export const useLocalStore = <S extends ILocalStore>(
-  creator: () => S,
-  deps: React.DependencyList = []
+    creator: () => S,
+    effect: React.DependencyList = []
 ): S => {
   const storeRef = React.useRef<S | null>(null);
 
-  if (!storeRef.current) {
+  if (storeRef.current === null) {
     storeRef.current = creator();
   }
 
   React.useEffect(() => {
-    const store = storeRef.current;
-
     return () => {
-      store?.destroy();
+      storeRef.current?.destroy();
     };
+     
   }, []);
 
   React.useEffect(() => {
-    storeRef.current?.destroy();
+    if (effect.length === 0) return;
+    const prevStore = storeRef.current!;
+    prevStore.destroy();
     storeRef.current = creator();
-  }, deps);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, effect);
 
   return storeRef.current;
 };

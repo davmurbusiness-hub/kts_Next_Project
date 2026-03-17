@@ -1,1 +1,1 @@
-export { default } from './BookmarkIcon.tsx';
+export { default } from './BookmarkIcon';

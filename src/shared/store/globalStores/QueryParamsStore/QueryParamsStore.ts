@@ -14,6 +14,7 @@ export default class QueryParamsStore implements IGlobalStore {
 
       search: computed,
       categories: computed,
+      sort: computed,
       queryString: computed,
 
       setSearch: action,
@@ -40,6 +41,20 @@ export default class QueryParamsStore implements IGlobalStore {
     return [];
   }
 
+  get sort(): string[] {
+    const value = this._params.sort;
+
+    if (Array.isArray(value)) {
+      return value.map(String);
+    }
+
+    if (typeof value === 'string') {
+      return [value];
+    }
+
+    return [];
+  }
+
   get queryString(): string {
     return qs.stringify(this._params, {
       encode: false,
@@ -52,10 +67,10 @@ export default class QueryParamsStore implements IGlobalStore {
     const merged = { ...this._params, ...next };
 
     const cleaned = Object.fromEntries(
-      Object.entries(merged).filter(([value]) => {
-        if (value.trim() === '') return false;
-        return !(Array.isArray(value) && value.length === 0);
-      })
+        Object.entries(merged).filter(([, value]) => {
+          if (typeof value === 'string' && value.trim() === '') return false;
+          return !(Array.isArray(value) && value.length === 0);
+        })
     ) as qs.ParsedQs;
 
     const newQuery = qs.stringify(cleaned, {

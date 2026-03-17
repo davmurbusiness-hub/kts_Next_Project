@@ -1,72 +1,57 @@
-'use client'
+'use client';
 import { Button, Input, Navbar, Text } from '@components/index';
-import { useCallback, useState } from 'react';
+import { useLocalStore } from '@hooks/useLocalStore';
+import { observer } from 'mobx-react-lite';
+import { useRouter } from 'next/navigation';
+import { useRootStore } from '@providers/StoreProvider';
+import RegistrationStore from '@store/localStores/AuthorizationStore/RegistrationStore/RegistrationStore';
 import s from './RegistrationPage.module.scss';
-import {useRouter} from "next/navigation";
-import {useRootStore} from "@providers/StoreProvider";
+import Link from "next/link";
+import {useToast} from "@providers/Toast/ToastProvider";
 
-const RegistrationPage = () => {
-  const [login, setLogin] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [passwordSecond, setPasswordSecond] = useState<string>('');
-  const [message, setMessage] = useState<string>('');
-  const rootStore = useRootStore();
-
-
-
-
-
+const RegistrationPage = observer(() => {
   const navigate = useRouter();
+  const rootStore = useRootStore();
+  const toast = useToast();
 
-  const handleSendInfo = useCallback(async () => {
-    if (login === '') {
-      setMessage('Заполните логин');
-      return;
-    }
-    if (password === '') {
-      setMessage('Заполните пароль');
-      return;
-    }
-    if (passwordSecond !== password) {
-      setMessage('Пароли не совпадают');
-      return;
-    }
-    const result = await rootStore.auth.registerReq(login, password);
-    if (result.success) {
-      setMessage(result.message);
-      setTimeout(() => navigate.push('/films'), 1000);
-    } else {
-      setMessage(result.message);
-    }
-  }, [login, navigate, password, passwordSecond, rootStore.auth]);
+  const registrationStore = useLocalStore(() => new RegistrationStore(rootStore, navigate, toast));
 
   return (
-    <div className={s.root}>
-      <Navbar actualPage={'login'} />
-      <div className={s.container}>
-        <Text className={s.nameText} tag={'h1'}>
-          Регистрация
-        </Text>
-        {message && (
-          <Text color={'accent'} view={'p-14'}>
-            {message}
+      <div className={s.root}>
+        <Navbar actualPage={'login'} />
+        <div className={s.container}>
+          <Text className={s.nameText} tag={'h1'}>
+            Регистрация
           </Text>
-        )}
-        <Input placeholder={'Логин'} value={login} onChange={setLogin} />
-        <Input type={'password'} placeholder={'Пароль'} value={password} onChange={setPassword} />
-        <Input
-          type={'password'}
-          placeholder={'Повторите пароль'}
-          value={passwordSecond}
-          onChange={setPasswordSecond}
-        />
-        <Button onClick={handleSendInfo}>Зарегистрироваться</Button>
-        <span className={s.regText} onClick={() => navigate.push('/login')}>
-          Логин
-        </span>
+          {registrationStore.message && (
+              <Text color={'accent'} view={'p-14'}>
+                {registrationStore.message}
+              </Text>
+          )}
+          <Input
+              placeholder={'Почта'}
+              value={registrationStore.login}
+              onChange={registrationStore.setLoginValue}
+          />
+          <Input
+              type={'password'}
+              placeholder={'Пароль'}
+              value={registrationStore.password}
+              onChange={registrationStore.setPasswordValue}
+          />
+          <Input
+              type={'password'}
+              placeholder={'Повторите пароль'}
+              value={registrationStore.passwordSecond}
+              onChange={registrationStore.setPasswordSecondValue}
+          />
+          <Button onClick={registrationStore.register}>Зарегистрироваться</Button>
+            <Link className={s.regText} href={'/login'}>
+                Уже есть аккаунт? Войдите
+            </Link>
+        </div>
       </div>
-    </div>
   );
-};
+});
 
 export default RegistrationPage;

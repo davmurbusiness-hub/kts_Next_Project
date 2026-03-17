@@ -1,5 +1,5 @@
-import type { Film } from 'types/FilmType';
-import type { Category } from 'types/CategoryType';
+import type { Film } from '@shared-types/FilmType';
+import type { Category } from '@shared-types/CategoryType';
 
 export enum HTTPMethod {
   GET = 'GET',
@@ -54,6 +54,18 @@ export type ApiResponse<SuccessT, ErrorT> =
       status: StatusHTTP;
     };
 
+export type UserType = {
+  id: number;
+  documentId: string;
+  username: string;
+  email: string;
+}
+
+
+// export type SortingInfo = {
+//   sort: string[];
+// }
+
 export type FavoriteAddResponse = {
   created_at: string;
   documentId: string;
@@ -93,14 +105,18 @@ export type IApiStore = {
 
 export type Filters = {
   title?: { $containsi: string };
-  category?: { id: { $in: number[] } };
+  category?: {
+    id?: { $in: number[] }
+  };
+  releaseYear?: { $containsi: number }
 };
 
 export type QueryParams = {
   populate: string[];
-  pagination: {
+  pagination?: {
     page: number;
     pageSize: number;
   };
   filters?: Filters;
+  sort?: string[];
 };

@@ -1,6 +1,6 @@
 import AuthStore from '../AuthStore/AuthStore';
 import QueryParamsStore from '../QueryParamsStore/QueryParamsStore';
-import type { IRootStore } from 'store/globalStores/RootStore/types';
+import type { IRootStore } from '@store/globalStores/RootStore/types';
 
 export default class RootStore implements IRootStore {
   readonly query: QueryParamsStore;

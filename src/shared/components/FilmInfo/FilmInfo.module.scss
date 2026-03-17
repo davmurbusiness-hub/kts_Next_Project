@@ -1,0 +1,51 @@
+@use "../../../shared/styles/variables" as *;
+
+.info {
+  display: flex;
+  flex-direction: column;
+
+  gap: clamp(12px, 1.67vw, 24px);
+
+  flex: 1 1 0;
+  min-width: 0;
+  width: 100%;
+}
+
+.title {
+  display: flex;
+  align-items: baseline;
+  gap: clamp(6px, 0.69vw, 10px);
+  flex-wrap: wrap;
+
+  > * {
+    min-width: 0;
+  }
+}
+
+
+.description {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(12px, 1.67vw, 24px);
+
+
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+@media (max-width: 768px) {
+  .info {
+    gap: 12px;
+  }
+
+  .description {
+    max-width: 100%;
+    gap: 12px;
+  }
+}
+
+@media (max-width: 375px) {
+  .info {
+    gap: 10px;
+  }
+}

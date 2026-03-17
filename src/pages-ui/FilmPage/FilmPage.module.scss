@@ -1,30 +1,27 @@
 @use "../../shared/styles/variables" as *;
 
-.icon {
-  transform: scaleX(-1);
+.filmPage {
+  width: 100%;
+  min-height: 100vh;
+  padding: 0 0 100px;
+
+  @media (max-width: 768px) {
+    padding: 0;
+  }
+
 }
 
-.loader{
+.loader {
   position: absolute;
   top: 50%;
   left: 50%;
 }
 
-.filmPage{
-  width: 100%;
-  min-height: 100vh;
-}
-
-.back {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-
-  margin-top: 10vh;
-  margin-left: 70px;
-  margin-bottom: 50px;
-
-  cursor: pointer;
+.trailer{
+  width: 75%;
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 }
 
 .content {
@@ -36,101 +33,21 @@
   padding: 0 clamp(16px, 10vw, 180px);
 
   width: 100%;
+
+  @media (max-width: 768px) {
+    padding: 12px;
+  }
 }
 
 .film {
   display: flex;
+  flex-direction: column;
   gap: clamp(16px, 4vw, 32px);
 
   width: 100%;
   flex-wrap: wrap;
-}
 
-.iframe {
-  width: 75%;
-  height: auto;
-  aspect-ratio: 16/9;
-  border-radius: 12px;
-  border: none
-
-}
-
-.info {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-
-  flex: 1 1 400px;
-  width: 50%;
-  min-width: 280px;
-}
-
-.title {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.cardImageInf {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  background: rgba(0, 0, 0, 0.8);
-  border-radius: 12px;
-
-  gap: 10px;
-  padding: 4px 8px;
-}
-
-.captionSlot {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-
-  padding-bottom: 8px;
-  width: 100%;
-
-  font-size: 14px;
-}
-
-.description {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-
-.gallery {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-
-
-@media (max-width: 768px) {
-  .film {
+  @media (max-width: 768px) {
     flex-direction: column;
   }
-
-  .back {
-    margin-left: 16px;
-  }
 }
-
-@media (max-height: 375px) {
-  .back{
-    margin-top: 50px;
-  }
-}
-
-
-@media (max-width: 375px) {
-  .content {
-    padding: 0 12px;
-  }
-
-  .info {
-    gap: 16px;
-  }
-}
-

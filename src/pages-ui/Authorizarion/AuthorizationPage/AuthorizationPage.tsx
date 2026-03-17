@@ -1,61 +1,51 @@
-'use client'
+'use client';
 import { Button, Input, Navbar, Text } from '@components/index';
-import { useCallback, useState } from 'react';
+import { useLocalStore } from '@hooks/useLocalStore';
+import { observer } from 'mobx-react-lite';
+import { useRouter } from 'next/navigation';
+import { useRootStore } from '@providers/StoreProvider';
+import LoginStore from '@store/localStores/AuthorizationStore/LoginStore';
 import s from './AuthorizationPage.module.scss';
-import {useRouter} from "next/navigation";
-import {useRootStore} from "@providers/StoreProvider";
+import Link from "next/link";
+import {useToast} from "@providers/Toast/ToastProvider";
 
-const AuthorizationPage = () => {
-  const [login, setLogin] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [message, setMessage] = useState<string>('');
+const AuthorizationPage = observer(() => {
   const navigate = useRouter();
   const rootStore = useRootStore();
+  const toast = useToast();
 
-
-
-
-
-
-  const handleSendInfo = useCallback(async () => {
-    if (login === '') {
-      setMessage('Заполните логин');
-      return;
-    }
-    if (password === '') {
-      setMessage('Заполните пароль');
-      return;
-    }
-    const result = await rootStore.auth.loginReq(login, password);
-    if (result.success) {
-      setMessage(result.message);
-      setTimeout(() => navigate.push('/films'), 1000);
-    } else {
-      setMessage(result.message);
-    }
-  }, [login, navigate, password, rootStore.auth]);
+  const loginStore = useLocalStore(() => new LoginStore(rootStore, navigate, toast));
 
   return (
-    <div className={s.root}>
-      <Navbar actualPage={'login'} />
-      <div className={s.container}>
-        <Text tag={'h1'} className={s.nameText}>
-          Вход
-        </Text>
-        {message && (
-          <Text color={'accent'} view={'p-14'}>
-            {message}
+      <div className={s.root}>
+        <Navbar actualPage={'login'} />
+        <div className={s.container}>
+          <Text tag={'h1'} className={s.nameText}>
+            Вход
           </Text>
-        )}
-        <Input placeholder={'Логин'} value={login} onChange={setLogin} />
-        <Input type={'password'} placeholder={'Пароль'} value={password} onChange={setPassword} />
-        <Button onClick={handleSendInfo}>Войти</Button>
-        <span className={s.regText} onClick={() => navigate.push('/registration')}>
-          Зарегистрироваться
-        </span>
+          {loginStore.message && (
+              <Text color={'accent'} view={'p-14'}>
+                {loginStore.message}
+              </Text>
+          )}
+          <Input
+              placeholder={'Логин'}
+              value={loginStore.login}
+              onChange={loginStore.setLoginValue}
+          />
+          <Input
+              type={'password'}
+              placeholder={'Пароль'}
+              value={loginStore.password}
+              onChange={loginStore.setPasswordValue}
+          />
+          <Button onClick={loginStore.validation}>Войти</Button>
+            <Link className={s.regText} href={'/registration'} >
+                Еще нет аккаунта? Зарегистрироваться
+            </Link>
+        </div>
       </div>
-    </div>
   );
-};
+});
 
 export default AuthorizationPage;

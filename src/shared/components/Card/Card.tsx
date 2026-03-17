@@ -1,9 +1,13 @@
 'use client'
-import { Button, StarIcon, Text } from '@components/index';
+import { Button, Text } from '@components/index';
 import React from 'react';
 import s from './Card.module.scss';
 import cn from 'classnames';
 import {useRouter} from "next/navigation";
+import Image from "next/image";
+import FilmRating from "@components/FilmRating";
+import FilmDuration from "@components/FilmDuration";
+import FilmMeta from "@components/FilmMeta";
 
 type Viewport = {
   width: string;
@@ -51,35 +55,21 @@ const Card: React.FC<CardProps> = ({
   ageLimit,
   ...rest
 }) => {
-  const hours = Math.trunc(duration / 60);
-  const minutes = duration % 60;
   const navigate = useRouter();
 
   return (
     <div className={cn(className, s.card)} onClick={onClick} {...rest}>
       <div className={s.cardImage}>
-        <span className={cn(s.cardImageInf, s.rating)}>
-          <Text view={'p-20'} weight={'medium'}>
-            {rating}
-          </Text>
-          <StarIcon iconType={'fill'} color={'yellow'} />
-        </span>
-        <span className={cn(s.cardImageInf, s.duration)}>
-          {hours}h {minutes}m
-        </span>
-        <img src={image} />
+        <FilmRating className={s.rating} rating={rating}/>
+
+        <FilmDuration duration={duration}/>
+        <Image className={s.img} src={image} fill alt={String(title)} sizes="(max-width: 768px) 100vw, 33vw" />
       </div>
       <div className={s.cardContent}>
         <div className={s.cardText}>
-          <span className={s.captionSlot}>
             <div className={s.captionSlot}>
-              <p>{releaseYear}</p>
-              <span>•</span>
-              <p>{category}</p>
-              <span>•</span>
-              <p>{ageLimit}+</p>
+              <FilmMeta releaseYear={releaseYear} categoryTitle={category} ageLimit={ageLimit}/>
             </div>
-          </span>
           <Text className={s.title} view={'p-20'} weight={'medium'} maxLines={2}>
             {title}
           </Text>
