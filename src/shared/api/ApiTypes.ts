@@ -59,8 +59,12 @@ export type UserType = {
   documentId: string;
   username: string;
   email: string;
-
 }
+
+
+// export type SortingInfo = {
+//   sort: string[];
+// }
 
 export type FavoriteAddResponse = {
   created_at: string;
@@ -114,4 +118,5 @@ export type QueryParams = {
     pageSize: number;
   };
   filters?: Filters;
+  sort?: string[];
 };

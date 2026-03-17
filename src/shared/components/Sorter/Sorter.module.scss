@@ -1,0 +1,66 @@
+@use "../../styles/variables" as *;
+
+.root {
+  position: relative;
+  display: inline-block;
+  width: fit-content
+}
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+
+  background: $dropdown-options-bg;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+  border-radius: 6px;
+
+  width: 400px;
+  max-width: calc(100vw - 32px);
+
+  z-index: 100;
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-bottom: 1px solid #8C8C8C;
+
+  &:first-child {
+    justify-content: space-between;
+    border-bottom: 2px solid #8C8C8C;
+    border-radius: 0;
+  }
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.section {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 16px;
+
+  &:first-child {
+    flex: 1;
+    justify-content: space-between;
+    max-width: 300px;
+    padding-right: 16px;
+    border-right: 1px solid #8C8C8C;
+  }
+
+  &:last-child {
+    justify-content: flex-end;
+    flex: 1;
+  }
+
+  @media (max-width: 480px) {
+    padding: 10px 12px;
+
+    &:first-child {
+      max-width: unset;
+    }
+  }
+}

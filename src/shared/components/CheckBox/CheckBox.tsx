@@ -42,6 +42,7 @@ export const CheckBox: React.FC<CheckBoxProps> = ({
             position: 'absolute',
             pointerEvents: 'none',
           }}
+          className={s.checkIcon}
         />
       )}
     </div>

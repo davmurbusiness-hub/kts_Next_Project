@@ -6,12 +6,15 @@ import { useRouter } from 'next/navigation';
 import { useRootStore } from '@providers/StoreProvider';
 import RegistrationStore from '@store/localStores/AuthorizationStore/RegistrationStore/RegistrationStore';
 import s from './RegistrationPage.module.scss';
+import Link from "next/link";
+import {useToast} from "@providers/Toast/ToastProvider";
 
 const RegistrationPage = observer(() => {
   const navigate = useRouter();
   const rootStore = useRootStore();
+  const toast = useToast();
 
-  const registrationStore = useLocalStore(() => new RegistrationStore(rootStore, navigate));
+  const registrationStore = useLocalStore(() => new RegistrationStore(rootStore, navigate, toast));
 
   return (
       <div className={s.root}>
@@ -43,9 +46,9 @@ const RegistrationPage = observer(() => {
               onChange={registrationStore.setPasswordSecondValue}
           />
           <Button onClick={registrationStore.register}>Зарегистрироваться</Button>
-          <span className={s.regText} onClick={() => navigate.push('/login')}>
-          Уже есть аккаунт? Войдите
-        </span>
+            <Link className={s.regText} href={'/login'}>
+                Уже есть аккаунт? Войдите
+            </Link>
         </div>
       </div>
   );

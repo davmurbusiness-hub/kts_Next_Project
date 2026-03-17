@@ -8,24 +8,26 @@ export const useLocalStore = <S extends ILocalStore>(
     creator: () => S,
     effect: React.DependencyList = []
 ): S => {
-  const isFirstRender = React.useRef(true);
-  const [store, setStore] = React.useState(creator);
+  const storeRef = React.useRef<S | null>(null);
+
+  if (storeRef.current === null) {
+    storeRef.current = creator();
+  }
 
   React.useEffect(() => {
-    return () => store.destroy();
-  }, [store]);
+    return () => {
+      storeRef.current?.destroy();
+    };
+     
+  }, []);
 
   React.useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-      return;
-    }
-    setStore((prevStore) => {
-      prevStore.destroy();
-      return creator();
-    });
+    if (effect.length === 0) return;
+    const prevStore = storeRef.current!;
+    prevStore.destroy();
+    storeRef.current = creator();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, effect);
 
-  return store;
+  return storeRef.current;
 };

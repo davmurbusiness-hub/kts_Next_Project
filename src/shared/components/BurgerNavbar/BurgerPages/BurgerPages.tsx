@@ -1,8 +1,9 @@
-import s from "@components/Navbar/Navbar.module.scss";
+import s from "@components/BurgerNavbar/BurgerNavbar.module.scss"
 import React from "react";
 import cn from "classnames";
 import {useRouter} from "next/navigation";
 import type {Page} from "@components/Navbar";
+import {CloseIcon} from "@components/index";
 
 type BurgerPagesProps = {
     pages: Page[];
@@ -40,6 +41,7 @@ const BurgerPageItem: React.FC<BurgerPageItemProps> = React.memo(({ page, actual
 const BurgerPages: React.FC<BurgerPagesProps> = ({ pages, actualPage, onItemClick }) => {
     return (
         <>
+            <CloseIcon  width={30} height={30} className={s.closeIcon} onClick={onItemClick} />
             {pages.map((page) => (
                 <BurgerPageItem
                     key={page.name}

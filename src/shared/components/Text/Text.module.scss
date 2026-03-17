@@ -47,6 +47,9 @@
 .color_accent{
     color: $text-accent;
 }
+.color_disabled{
+    color: $check-disabled;
+}
 
 .clamp {
     display: -webkit-box;

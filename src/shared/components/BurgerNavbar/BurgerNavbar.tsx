@@ -14,13 +14,14 @@ type BurgerNavbarProps = {
   className?: string;
   pages: Page[];
   actualPage: string;
-  username?: string;
+  username: string;
   totalFavorites?: number;
+  authorized: boolean;
 };
 
 const iconSize = 30;
 
-const BurgerNavbar: React.FC<BurgerNavbarProps> = ({ pages, actualPage, className, username, totalFavorites }) => {
+const BurgerNavbar: React.FC<BurgerNavbarProps> = ({ pages, actualPage, className, username, totalFavorites, authorized }) => {
   const navigate = useRouter();
   const [isOpen, setIsOpen] = React.useState(false);
 
@@ -45,8 +46,8 @@ const BurgerNavbar: React.FC<BurgerNavbarProps> = ({ pages, actualPage, classNam
         <Image className={s.logo} src={logo} alt="logo" onClick={() => navigate.push('/')} />
 
         <div className={s.icons}>
-          <FavoritesIcon actualPage={actualPage} iconSize={iconSize} totalFavorites={totalFavorites} />
-          <AccountIcon actualPage={actualPage} iconSize={iconSize} username={username} />
+          <FavoritesIcon authorized={authorized} actualPage={actualPage} iconSize={iconSize} totalFavorites={totalFavorites} />
+          <AccountIcon authorized={authorized} actualPage={actualPage} iconSize={iconSize} username={username} />
         </div>
       </div>
 

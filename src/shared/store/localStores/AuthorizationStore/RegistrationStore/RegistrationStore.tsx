@@ -1,8 +1,8 @@
 import type { ILocalStore } from "@hooks/useLocalStore";
 import { action, makeObservable, observable } from "mobx";
 import type RootStore from "@store/globalStores/RootStore/RootStore";
-import type {AppRouterInstance} from "next/dist/shared/lib/app-router-context.shared-runtime"; // уточните путь
-
+import type {AppRouterInstance} from "next/dist/shared/lib/app-router-context.shared-runtime";
+import type {ToastApi} from "@providers/Toast/ToastProvider";
 
 export default class RegistrationStore implements ILocalStore {
     login: string = "";
@@ -12,7 +12,9 @@ export default class RegistrationStore implements ILocalStore {
 
     constructor(
         private readonly rootStore: RootStore,
-        private readonly navigate: AppRouterInstance
+        private readonly navigate: AppRouterInstance,
+    private readonly toast: ToastApi
+
     ) {
         makeObservable<RegistrationStore>(this, {
             login: observable,
@@ -47,36 +49,36 @@ export default class RegistrationStore implements ILocalStore {
         const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
         if (this.login === "") {
-            this.setMessage("Заполните логин (email)");
+            this.toast.error("Заполните логин (email)");
             return;
         }
 
         if (!emailRegex.test(this.login)) {
-            this.setMessage("Введите корректный email\nПримеры:\n- user@example.com\n- name@domain.ru\n- test@mail.org");
+            this.toast.error("Введите корректный email\nПримеры:\n- user@example.com\n- name@domain.ru\n- test@mail.org");
             return;
         }
 
         if (this.password === "") {
-            this.setMessage("Заполните пароль");
+            this.toast.error("Заполните пароль");
             return;
         }
 
         if (this.password.length < 6) {
-            this.setMessage("Пароль должен содержать минимум 6 символов");
+            this.toast.error("Пароль должен содержать минимум 6 символов");
             return;
         }
 
         if (this.passwordSecond !== this.password) {
-            this.setMessage("Пароли не совпадают");
+            this.toast.error("Пароли не совпадают");
             return;
         }
 
         const result = await this.rootStore.auth.registerReq(this.login, this.password);
         if (result.success) {
-            this.setMessage(result.message);
-            setTimeout(() => this.navigate.push("/films"), 1000);
+            this.toast.success(result.message);
+            this.navigate.push("/films");
         } else {
-            this.setMessage(result.message);
+            this.toast.error(result.message);
         }
     };
 

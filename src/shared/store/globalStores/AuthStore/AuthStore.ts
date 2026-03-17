@@ -117,10 +117,11 @@ export default class AuthStore implements IGlobalStore {
       if (!response)
         return {
           success: false,
-          message: 'Неправильно введена почта, или такой логин уже существует',
+          message: 'Такой логин уже существует',
         };
+
       runInAction(() => {
-        this._login = String(response.user);
+        this._login = String(response.user.username);
         this._authorized = true;
         this._token = response.jwt;
         this.getFavorite()
@@ -155,6 +156,7 @@ export default class AuthStore implements IGlobalStore {
 
     try {
       runInAction(() => {
+
         this._login = String(response.user.username);
         this._authorized = true;
         this._token = response.jwt;
@@ -170,6 +172,16 @@ export default class AuthStore implements IGlobalStore {
         message: String(error),
       };
     }
+  }
+
+  logout = async (): Promise<void> => {
+    if (!this._token) return;
+    runInAction(() => {
+      this._token = '';
+      this._login = '';
+      this._authorized = false;
+      this._favorites = [];
+    });
   }
 
   destroy(): void {

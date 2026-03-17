@@ -4,6 +4,7 @@ import { roboto } from '@/fonts/roboto';
 import { StoreProvider } from "@providers/StoreProvider";
 import {QueryParamsStoreInitializer, } from "@hooks/useQueryParamsStoreInit";
 import type { Metadata } from "next";
+import {ToastProvider} from "@providers/Toast/ToastProvider";
 
 export const metadata: Metadata = {
     title: {
@@ -11,6 +12,9 @@ export const metadata: Metadata = {
         default: 'Cinema',
     },
     description: 'Подборка фильмов и сериалов для вечера',
+    icons: {
+        icon: '/icon.png',
+    }
 };
 
 export default function RootLayout({children}: Readonly<{
@@ -21,7 +25,9 @@ export default function RootLayout({children}: Readonly<{
       <body className={roboto.className}>
       <StoreProvider>
           <QueryParamsStoreInitializer />
-          {children}
+          <ToastProvider>
+              {children}
+          </ToastProvider>
       </StoreProvider>
       </body>
     </html>

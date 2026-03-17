@@ -3,6 +3,12 @@ import { action, makeObservable, observable } from "mobx";
 import type {AppRouterInstance} from "next/dist/shared/lib/app-router-context.shared-runtime";
 import type RootStore from "@store/globalStores/RootStore/RootStore";
 
+type ToastApi = {
+    success: (message: string, title?: string) => void;
+    error: (message: string, title?: string) => void;
+    warning: (message: string, title?: string) => void;
+    info: (message: string, title?: string) => void;
+};
 
 export default class LoginStore implements ILocalStore {
     login: string = "";
@@ -11,7 +17,8 @@ export default class LoginStore implements ILocalStore {
 
     constructor(
         private readonly rootStore: RootStore,
-        private readonly navigate: AppRouterInstance
+        private readonly navigate: AppRouterInstance,
+        private readonly toast: ToastApi
     ) {
         makeObservable<LoginStore>(this, {
             login: observable,
@@ -25,7 +32,7 @@ export default class LoginStore implements ILocalStore {
     }
 
     setLoginValue = (value: string) => {
-        this.login = value;
+        this.login = value.toLowerCase();
     };
 
     setPasswordValue = (value: string) => {
@@ -38,20 +45,21 @@ export default class LoginStore implements ILocalStore {
 
     validation = async () => {
         if (this.login === "") {
-            this.setMessage("Заполните логин");
+            this.toast.error("Заполните логин");
             return;
         }
         if (this.password === "") {
-            this.setMessage("Заполните пароль");
+            this.toast.error("Заполните пароль");
             return;
         }
 
         const result = await this.rootStore.auth.loginReq(this.login, this.password);
         if (result.success) {
-            this.setMessage(result.message);
-            setTimeout(() => this.navigate.push("/films"), 1000);
+
+            this.toast.success(result.message, );
+            this.navigate.push("/films")
         } else {
-            this.setMessage(result.message);
+            this.toast.error(result.message);
         }
     };
 

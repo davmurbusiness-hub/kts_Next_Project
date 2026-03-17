@@ -1,6 +1,6 @@
 'use client'
 import s from './FilmsPage.module.scss';
-import { useObserver } from '@hooks/useObserver';
+import {useObserver} from '@hooks/useObserver';
 import {
     Button,
     Input,
@@ -11,31 +11,50 @@ import {
     PageText,
     Text,
 } from '@components/index';
-import { observer } from 'mobx-react-lite';
-import { useRef } from 'react';
+import {observer} from 'mobx-react-lite';
+import React, {useCallback, useEffect, useRef} from 'react';
 import FilmsListStore from '@store/localStores/FilmsListStore/';
-import { useLocalStore } from '@hooks/useLocalStore';
+import {useLocalStore} from '@hooks/useLocalStore';
 import type {Category} from "@shared-types/CategoryType";
 import type {MetaFromResponse} from "@api/ApiTypes";
 import type {Film} from "@shared-types/FilmType";
 import {useRootStore} from "@providers/StoreProvider";
+import Sorter from "@components/Sorter";
+import {useToast} from "@providers/Toast/ToastProvider";
+import ModalWindow from "@components/ModalWindow";
+import {NonAuthorizedComponent} from "@components/Navbar/FavoritesIcon/FavoritesIcon";
 
-type Props = {
+const sortOptions = [
+    {id: 'rating', label: 'Рейтинг'},
+    {id: 'releaseYear', label: 'Год'},
+];
+
+type FilmsPageProps = {
     initialFilms: Film[];
     initialMeta: MetaFromResponse | null;
     initialCategories: Category[];
+    initialQueryString: string;
 };
 
-const FilmsPage = ({ initialFilms, initialMeta, initialCategories }: Props) => {
+const FilmsPage = ({initialFilms, initialMeta, initialCategories, initialQueryString}: FilmsPageProps) => {
     const rootStore = useRootStore();
+    const toast = useToast();
+
     const filmsListStore = useLocalStore(
         () => new FilmsListStore({
             films: initialFilms,
             categories: initialCategories,
             responseMeta: initialMeta ?? undefined,
+            rootStore: rootStore,
+            toast: toast,
+            initialQueryString,
         })
     );
     const lastElementRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        filmsListStore.init();
+    }, [filmsListStore]);
 
     useObserver(
         lastElementRef,
@@ -45,10 +64,8 @@ const FilmsPage = ({ initialFilms, initialMeta, initialCategories }: Props) => {
     );
 
     return (
-
-
         <div className={s.page}>
-            <Navbar actualPage={'films'} />
+            <Navbar actualPage={'films'}/>
             <div className={s.container}>
                 <PageText
                     title={'Cinema'}
@@ -69,17 +86,24 @@ const FilmsPage = ({ initialFilms, initialMeta, initialCategories }: Props) => {
                                 Найти
                             </Button>
                         </div>
-                        <MultiDropdown
-                            value={filmsListStore.selectedCat}
-                            onChange={filmsListStore.setCategories}
-                            options={filmsListStore.categoryOptions}
-                            getTitle={filmsListStore.getDisplayTitle}
-                        />
+                        <div className={s.filters}>
+                            <MultiDropdown
+                                value={filmsListStore.selectedCat}
+                                onChange={filmsListStore.setCategories}
+                                options={filmsListStore.categoryOptions}
+                                getTitle={filmsListStore.getDisplayTitle}
+                            />
+                            <Sorter
+                                options={sortOptions}
+                                value={filmsListStore.selectedSortState}
+                                onChange={filmsListStore.setSort}
+                            />
+                        </div>
                     </div>
                 </div>
                 <div className={s.paginationSection}>
                     <div className={s.allFilms}>
-                        <p style={{ fontWeight: 'bold', fontSize: 32 }}>Все фильмы</p>
+                        <p style={{fontWeight: 'bold', fontSize: 32}}>Все фильмы</p>
                         {filmsListStore.totalPages > 0 && (
                             <Text color={'accent'} view={'p-20'}>
                                 {filmsListStore.totalFilms}
@@ -93,18 +117,23 @@ const FilmsPage = ({ initialFilms, initialMeta, initialCategories }: Props) => {
                 buttonText={'В избранное'}
                 emptyText={'Фильмов по вашему запросу не найдено, попробуйте еще'}
                 isLoading={filmsListStore.isLoading}
-                buttonFunc={(film) => {
-                    rootStore.auth.addFavorite(film);
-                }}
+                buttonFunc={useCallback((film) => filmsListStore.handleFavoriteClick(film), [filmsListStore])}
             />
 
+            <ModalWindow
+                isOpen={filmsListStore.isModalOpen}
+                onClose={filmsListStore.closeModal}
+            >
+                <NonAuthorizedComponent/>
+            </ModalWindow>
+
             <div
-                style={{ visibility: filmsListStore.isLoading ? 'visible' : 'hidden' }}
+                style={{visibility: filmsListStore.isLoading ? 'visible' : 'hidden'}}
                 className={s.loader}
             >
-                <Loader />
+                <Loader/>
             </div>
-            <div ref={lastElementRef} style={{ height: '20px' }} />
+            <div ref={lastElementRef} style={{height: '20px'}}/>
         </div>
     );
 };
