@@ -40,10 +40,7 @@ const ModalWindow: React.FC<ModalWindowProps> = ({isOpen, onClose, children}) =>
             aria-modal="true"
         >
             <div className={s.modal}>
-                <CloseIcon className={s.closeBtn} onClick={onClose} aria-label="Закрыть">
-                    <CloseIcon/>
-                </CloseIcon>
-
+                <CloseIcon className={s.closeBtn} onClick={onClose} aria-label="Закрыть"/>
                 {children}
             </div>
         </div>

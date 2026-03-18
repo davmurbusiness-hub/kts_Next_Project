@@ -4,7 +4,7 @@ import { action, makeObservable, observable, runInAction } from 'mobx';
 import { Meta } from '@utils/meta';
 import ApiStore from '@api/ApiStore';
 
-type PrivateFields = '_documentId';
+// type PrivateFields = '_documentId';
 type InitialData = {
   film?: Film;
 };
@@ -20,10 +20,9 @@ export default class FilmPageStore implements ILocalStore {
   meta: Meta = Meta.initial;
 
   constructor(documentId = '', initialData?: InitialData) {
-    makeObservable<FilmPageStore, PrivateFields>(this, {
+    makeObservable<FilmPageStore>(this, {
       film: observable.ref,
       meta: observable.ref,
-      _documentId: observable,
       getFilm: action,
     });
 

@@ -56,20 +56,43 @@ export default class AuthStore implements IGlobalStore {
   async addFavorite(film: Film): Promise<void> {
     if (!this._token) return;
 
+    const alreadyExists = this._favorites.some((f) => f.id === film.id);
+    if (!alreadyExists) {
+      runInAction(() => this._favorites.push(film));
+    }
+
     const response = await this._apiStore.fetchAddFavorites(this._token, film.id);
 
     runInAction(() => {
       const received = response?.film
-        ? Array.isArray(response.film)
-          ? response.film[0]
-          : response.film
-        : null;
+          ? Array.isArray(response.film) ? response.film[0] : response.film
+          : null;
 
-      if (!received) return;
+      if (!received) {
+        this._favorites = this._favorites.filter((f) => f.id !== film.id);
+        return;
+      }
 
-      const alreadyExists = this._favorites.some((f) => f.id === received.id);
-      if (!alreadyExists) {
-        this._favorites.push(received);
+      // Заменяем на серверный объект
+      const index = this._favorites.findIndex((f) => f.id === film.id);
+      if (index !== -1) this._favorites[index] = received;
+    });
+  }
+
+  async removeFavorite(film: Film): Promise<void> {
+    if (!this._token) return;
+
+    // Сразу удаляем
+    runInAction(() => {
+      this._favorites = this._favorites.filter((f) => f.id !== film.id);
+    });
+
+    const response = await this._apiStore.fetchRemoveFavorites(this._token, film.id);
+
+    // Откат если ошибка
+    runInAction(() => {
+      if (!response) {
+        this._favorites.push(film);
       }
     });
   }
@@ -94,17 +117,6 @@ export default class AuthStore implements IGlobalStore {
     });
   }
 
-  async removeFavorite(film: Film): Promise<void> {
-    if (!this._token) return;
-
-    const response = await this._apiStore.fetchRemoveFavorites(this._token, film.id);
-
-    runInAction(() => {
-      if (!response) return;
-
-      this._favorites = this._favorites.filter((f) => f.id !== film.id);
-    });
-  }
 
   async registerReq(login = '', password = ''): Promise<requestAns> {
     if (!login || !password)

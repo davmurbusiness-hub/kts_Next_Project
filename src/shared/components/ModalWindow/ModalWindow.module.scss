@@ -22,11 +22,12 @@
   align-items: center;
   gap: 0;
 
-  width: 100%;
-  max-width: 400px;
-  max-height: 800px;
-  height: auto;
-  padding: 2rem 1.5rem 1.5rem;
+  width: min(90vw, 1100px);
+  // Не даём модалу вылезти за экран по высоте — оверлей имеет padding 1rem с каждой стороны
+  max-height: calc(100dvh - 2rem);
+  overflow: hidden;
+
+  padding: 2.5rem 1rem 1rem;
 
   background: $card-bg;
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -49,10 +50,17 @@
   color: rgba(255, 255, 255, 0.3);
   cursor: pointer;
   transition: background 0.12s, color 0.12s;
+  // Поверх iframe
+  z-index: 1;
 
   &:hover {
     color: rgba(255, 255, 255, 0.8);
   }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
 @keyframes slideUp {

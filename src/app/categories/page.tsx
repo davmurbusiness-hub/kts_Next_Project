@@ -9,9 +9,11 @@ export const metadata: Metadata = {
 
 export default async function Page() {
 
-     const arr = await fetchGalleryCategories();
+
+
+    const catPack = await fetchGalleryCategories();
 
     return (
-        <CategoriesPage />
+        <CategoriesPage categories={catPack}/>
     )
 }

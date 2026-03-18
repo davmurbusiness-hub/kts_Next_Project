@@ -4,14 +4,18 @@ import React, {useState} from "react";
 import Link from "next/link";
 import ModalWindow from "@components/ModalWindow";
 import LoginIcon from "@components/icons/LoginIcon";
+import {useRouter} from "next/navigation";
+import cn from "classnames";
 
 type FavoritesIconProps = {
-    actualPage: string,
+    actualPage?: string,
     iconSize: number,
     totalFavorites?: number
     authorized: boolean
+    navbarIcon?: boolean
+    onClick?: (e: React.MouseEvent) => void;
+    className?: string
 }
-
 
 export const NonAuthorizedComponent = () =>
     <div className={s.modelRoot}>
@@ -22,18 +26,33 @@ export const NonAuthorizedComponent = () =>
         </Link>
     </div>
 
-
-
-
-const FavoritesIcon: React.FC<FavoritesIconProps> = ({actualPage, iconSize, totalFavorites, authorized}) => {
+const FavoritesIcon: React.FC<FavoritesIconProps> = ({
+                                                         actualPage,
+                                                         iconSize,
+                                                         totalFavorites,
+                                                         navbarIcon = true,
+                                                         authorized,
+                                                         onClick,
+                                                         className,
+                                                     }) => {
     const color = actualPage === 'favorites' ? 'accent' : 'white'
     const [isOpen, setIsOpen] = useState(false);
+    const navigate = useRouter();
+
+    const handleClick = (e: React.MouseEvent) => {
+        if (onClick) {
+            onClick(e);
+        } else if (authorized) {
+            navigate.push('/favorites');
+        } else {
+            setIsOpen(true);
+        }
+    };
 
     const icon = (
-        <div className={s.iconWrapper}>
-            {authorized && (
+        <div className={cn(s.iconWrapper, className)}>
+            {authorized && navbarIcon && (
                 <Text color={color} className={s.iconText}>{totalFavorites}</Text>
-
             )}
             <BookmarkIcon
                 className={s.icon}
@@ -66,7 +85,7 @@ const FavoritesIcon: React.FC<FavoritesIconProps> = ({actualPage, iconSize, tota
     }
 
     return (
-        <Link href={'/favorites'} className={s.iconWrapper}>
+        <div className={cn(s.iconWrapper, className)} onClick={handleClick}>
             <Text color={color} className={s.iconText}>{totalFavorites ? totalFavorites : ''}</Text>
             <BookmarkIcon
                 color={color}
@@ -75,8 +94,8 @@ const FavoritesIcon: React.FC<FavoritesIconProps> = ({actualPage, iconSize, tota
                 width={iconSize}
                 height={iconSize}
             />
-        </Link>
-
+        </div>
     )
 }
+
 export default FavoritesIcon;

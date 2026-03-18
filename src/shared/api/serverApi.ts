@@ -1,4 +1,4 @@
-import {parse, stringify} from 'qs';
+import qs, {parse, stringify} from 'qs';
 import type {Category} from "@shared-types/CategoryType";
 
 const BASE_URL = 'https://front-school-strapi.ktsdev.ru';
@@ -85,9 +85,15 @@ export async function fetchGalleryCategories() {
         pagination: { page: 1, pageSize: 1 },
     };
 
-    const galleryUrls: Array<{ categoryId: number; url: string } | null> = await Promise.all(
+    const galleryUrls: Array<{ category: Category; url: string } | null> = await Promise.all(
         categories.data.map(async (category: Category) => {
+            // Если category — объект, извлекаем id и сохраняем объект; иначе считаем, что данных недостаточно
             const categoryId = typeof category === 'object' ? category.id : category;
+            const categoryObject = typeof category === 'object' ? category : null;
+
+            // Если category не является объектом, невозможно вернуть полную категорию — пропускаем
+            if (!categoryObject) return null;
+
             const query = {
                 ...baseQuery,
                 filters: {
@@ -97,12 +103,9 @@ export async function fetchGalleryCategories() {
                 },
             };
 
-            const queryString = new URLSearchParams(
-                JSON.parse(JSON.stringify(query))
-            ).toString();
-
+            const queryString = qs.stringify(query, { encodeValuesOnly: true });
             const url = `${BASE_URL}/api/films?${queryString}`;
-            console.log(url);
+
             try {
                 const res = await fetch(url, {
                     next: {
@@ -127,13 +130,12 @@ export async function fetchGalleryCategories() {
                 const imageUrl = firstImage.attributes?.url || firstImage.url;
                 if (!imageUrl) return null;
 
-                return { categoryId, url: imageUrl };
-            } catch (error) {
-                console.error(`Ошибка при загрузке галереи для категории ${categoryId}:`, error);
+                return { category: categoryObject, url: imageUrl };
+            } catch {
                 return null;
             }
         })
     );
 
-    return galleryUrls.filter((item): item is { categoryId: number; url: string } => item !== null);
+    return galleryUrls.filter((item): item is { category: Category; url: string } => item !== null);
 }

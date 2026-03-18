@@ -9,10 +9,10 @@ import {
     MultiDropdown,
     Navbar,
     PageText,
-    Text,
+    Text, FilmPlayer,
 } from '@components/index';
 import {observer} from 'mobx-react-lite';
-import React, {useCallback, useEffect, useRef} from 'react';
+import React, {useEffect, useRef} from 'react';
 import FilmsListStore from '@store/localStores/FilmsListStore/';
 import {useLocalStore} from '@hooks/useLocalStore';
 import type {Category} from "@shared-types/CategoryType";
@@ -23,6 +23,7 @@ import Sorter from "@components/Sorter";
 import {useToast} from "@providers/Toast/ToastProvider";
 import ModalWindow from "@components/ModalWindow";
 import {NonAuthorizedComponent} from "@components/Navbar/FavoritesIcon/FavoritesIcon";
+import {FilmCardActionSlot} from "@components/Card/actionCardSlots/ActionCardSlot";
 
 const sortOptions = [
     {id: 'rating', label: 'Рейтинг'},
@@ -114,12 +115,21 @@ const FilmsPage = ({initialFilms, initialMeta, initialCategories, initialQuerySt
             </div>
             <FilmsList
                 filmsList={filmsListStore.films}
-                buttonText={'В избранное'}
-                emptyText={'Фильмов по вашему запросу не найдено, попробуйте еще'}
+                emptyText="Фильмов по вашему запросу не найдено, попробуйте еще"
                 isLoading={filmsListStore.isLoading}
-                buttonFunc={useCallback((film) => filmsListStore.handleFavoriteClick(film), [filmsListStore])}
+                actionCardSlot={(film) => (
+                    <FilmCardActionSlot
+                        trailerUrl={film.trailerUrl}
+                        buttonText="В избранное"
+                        actionFavorites={() => filmsListStore.handleFavoriteClick(film)}
+                        consists={rootStore.auth.favorites.some(f => f.id === film.id)}
+                        onWatchTrailer={filmsListStore.openTrailer}
+                    />
+                )}
             />
-
+            <ModalWindow isOpen={filmsListStore.isTrailerOpen} onClose={filmsListStore.closeTrailer}>
+                <FilmPlayer trailerUrl={filmsListStore.trailerUrl} autoPlay={true} />
+            </ModalWindow>
             <ModalWindow
                 isOpen={filmsListStore.isModalOpen}
                 onClose={filmsListStore.closeModal}

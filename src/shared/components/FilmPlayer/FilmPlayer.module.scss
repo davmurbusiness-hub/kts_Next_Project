@@ -1,10 +1,16 @@
 @use "../../../shared/styles/variables" as *;
 
 .iframe {
-  width: auto;
-  height: 100%;
-  aspect-ratio: 16/9;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
   border-radius: 12px;
   border: none;
   display: block;
+
+  @media (orientation: portrait) {
+    width: auto;
+    max-width: 100%;
+    max-height: calc(100dvh - 5.5rem);
+  }
 }
